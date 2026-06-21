@@ -1,0 +1,303 @@
+@import "tailwindcss";
+
+/*
+  GridCRM design system: "Registre Souverain"
+  Light-primary ink-on-paper register, single locked accent (Vert Ardoise),
+  with a fully engineered opt-in dark mode. Theme is a CSS-variable swap,
+  never scroll-driven. Legal pages force light via .force-light.
+*/
+
+:root,
+[data-theme="light"],
+.force-light {
+  /* surfaces (paper-cool, never glaring white) */
+  --paper: #fbfbf9;
+  --sunken: #f4f4f0;
+  --inset: #ecece6;
+  --raised: #ffffff;
+  /* text ramp */
+  --ink: #16191d;
+  --ink-2: #3a3f46;
+  --muted: #6b7178;
+  --faint: #9aa0a6;
+  /* single locked accent: Vert Ardoise */
+  --accent: #1f4d3d;
+  --accent-tint: #2f6b54;
+  --accent-shade: #143329;
+  --on-accent: #fbfbf9;
+  /* derived */
+  --line: rgba(22, 25, 29, 0.12);
+  --line-strong: rgba(22, 25, 29, 0.22);
+  --accent-wash: rgba(31, 77, 61, 0.06);
+  --accent-line: rgba(31, 77, 61, 0.28);
+  --shadow: 0 1px 2px rgba(22, 25, 29, 0.04);
+  /* primary CTA is near-black ink in light mode (matches the brand hero) */
+  --btn-bg: var(--ink);
+  --btn-fg: var(--paper);
+  --btn-bg-hover: #2a2f36;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --paper: #0c0d0f;
+  --sunken: #131518;
+  --inset: #1b1e22;
+  --raised: #131518;
+  --ink: #f4f2ee;
+  --ink-2: #a7acb2;
+  --muted: #6e747b;
+  --faint: #5a6066;
+  /* same green identity, pushed to readout luminance for graphite */
+  --accent: #2bb673;
+  --accent-tint: #4cc98c;
+  --accent-shade: #1f8f59;
+  --on-accent: #0c0d0f;
+  --line: rgba(244, 242, 238, 0.12);
+  --line-strong: rgba(244, 242, 238, 0.22);
+  --accent-wash: rgba(43, 182, 115, 0.08);
+  --accent-line: rgba(43, 182, 115, 0.32);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  /* in dark mode the primary CTA keeps the green readout identity */
+  --btn-bg: var(--accent);
+  --btn-fg: var(--on-accent);
+  --btn-bg-hover: var(--accent-tint);
+  color-scheme: dark;
+}
+
+/* When no explicit choice is stored, follow the OS preference. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --paper: #0c0d0f;
+    --sunken: #131518;
+    --inset: #1b1e22;
+    --raised: #131518;
+    --ink: #f4f2ee;
+    --ink-2: #a7acb2;
+    --muted: #6e747b;
+    --faint: #5a6066;
+    --accent: #2bb673;
+    --accent-tint: #4cc98c;
+    --accent-shade: #1f8f59;
+    --on-accent: #0c0d0f;
+    --line: rgba(244, 242, 238, 0.12);
+    --line-strong: rgba(244, 242, 238, 0.22);
+    --accent-wash: rgba(43, 182, 115, 0.08);
+    --accent-line: rgba(43, 182, 115, 0.32);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --btn-bg: var(--accent);
+    --btn-fg: var(--on-accent);
+    --btn-bg-hover: var(--accent-tint);
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-sunken: var(--sunken);
+  --color-inset: var(--inset);
+  --color-raised: var(--raised);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
+  --color-accent: var(--accent);
+  --color-accent-tint: var(--accent-tint);
+  --color-accent-shade: var(--accent-shade);
+  --color-on-accent: var(--on-accent);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent-wash: var(--accent-wash);
+  --color-accent-line: var(--accent-line);
+  --color-btn-bg: var(--btn-bg);
+  --color-btn-fg: var(--btn-fg);
+  --color-btn-bg-hover: var(--btn-bg-hover);
+
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  --radius-card: 8px;
+  --radius-sm: 4px;
+
+  --default-font-family: var(--font-sans);
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  /* clip (not hidden) so transient reveal transforms never spawn a horizontal
+     scrollbar, while keeping position: sticky working. */
+  overflow-x: clip;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "kern";
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Tabular figures everywhere mono is used, so columns of numbers align. */
+.font-mono,
+[class*="font-mono"] {
+  font-feature-settings: "tnum" 1, "zero" 1;
+}
+
+/* Accent focus ring for keyboard users (WCAG). */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Faint engraved hairline grid used as section-edge texture only. */
+.grid-texture {
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 0%, transparent 78%);
+  mask-image: radial-gradient(ellipse at center, #000 0%, transparent 78%);
+  opacity: 0.5;
+}
+
+/* Hairline that warms to accent on hover (cards / rows). */
+.hairline {
+  border: 1px solid var(--line);
+}
+
+/* Standard page rhythm helpers. */
+.shell {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+@media (min-width: 768px) {
+  .shell {
+    padding-inline: 2rem;
+  }
+}
+
+/* Hover lift for cards (transform + tinted shadow, never pure black). */
+.hover-lift {
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent-line);
+  box-shadow: 0 14px 34px -16px rgba(22, 25, 29, 0.18);
+}
+[data-theme="dark"] .hover-lift:hover {
+  box-shadow: 0 14px 34px -16px rgba(0, 0, 0, 0.6);
+}
+
+/* Soft pulse ring on the primary hero CTA (attention cue, motivated). */
+@keyframes cta-pulse {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-line);
+  }
+  70% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.cta-pulse {
+  animation: cta-pulse 3s ease-out infinite;
+}
+
+/* Live status dot. */
+@keyframes live-dot {
+  0% {
+    box-shadow: 0 0 0 0 var(--accent-line);
+  }
+  70% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.live-dot {
+  animation: live-dot 2s ease-out infinite;
+}
+
+/* Ambient concentric rings behind the hero instrument. */
+@keyframes ring-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 0.8;
+  }
+}
+.ring-breathe {
+  animation: ring-breathe 7s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Infinite logo marquee (the one allowed marquee on the page). */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 32s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Anime.js card reveals: pre-hide only when JS + motion are on (set by
+   AnimeScript), so no-JS and reduced-motion visitors always see the cards.
+   Anime.js sets inline opacity during the reveal, which overrides this. */
+html[data-anim="on"] .wow-card {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wow-card {
+    opacity: 1 !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
