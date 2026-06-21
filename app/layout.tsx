@@ -8,6 +8,7 @@ import { AnimeScript } from "@/components/layout/AnimeScript";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { StickyCta } from "@/components/layout/StickyCta";
+import { Analytics } from "@vercel/analytics/next";
 
 const home = routesSeo[0];
 
@@ -44,6 +45,7 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <StickyCta />
+        <Analytics />
       </body>
     </html>
   );
