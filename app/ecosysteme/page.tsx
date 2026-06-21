@@ -30,79 +30,98 @@ export default function EcosystemePage() {
         <SectionHeader as="h1" size="lg" eyebrow="Écosystème" title={ecosystemHeader.heading} />
       </Section>
 
-      {/* Hub: GridCRM core + orbiting tools */}
+      {/* System map: GridCRM core hub + connected tools */}
       <Section className="pt-0">
-        <div className="relative">
-          <svg
-            className="pointer-events-none absolute left-1/2 top-16 -z-0 -translate-x-1/2 text-line"
-            width="520"
-            height="520"
-            viewBox="0 0 520 520"
-            fill="none"
+        {/* Core hub — featured */}
+        <div className="relative isolate overflow-hidden rounded-[12px] border-2 border-accent bg-raised p-7 md:p-9">
+          <div
             aria-hidden
-          >
-            <circle cx="260" cy="260" r="120" stroke="currentColor" />
-            <circle cx="260" cy="260" r="200" stroke="currentColor" />
-            <circle cx="260" cy="260" r="258" stroke="currentColor" strokeDasharray="2 6" />
-          </svg>
+            className="pointer-events-none absolute -right-24 -top-24 -z-10 h-72 w-72 rounded-full"
+            style={{ background: "radial-gradient(circle, var(--accent-wash), transparent 70%)" }}
+          />
+          <div className="flex flex-col gap-7 lg:flex-row lg:items-center lg:gap-10">
+            <div className="flex items-start gap-5">
+              <span className="inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-[14px] border border-accent-line bg-accent-wash text-accent">
+                {core.icon && <Icon name={core.icon} size={32} aria-hidden />}
+              </span>
+              <div>
+                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+                  {core.role}
+                </span>
+                <h2 className="mt-1 font-display text-3xl text-ink md:text-4xl">{core.name}</h2>
+              </div>
+            </div>
 
-          <div className="relative mx-auto max-w-sm rounded-[8px] border-2 border-accent bg-raised p-6 text-center">
-            <span className="inline-flex h-11 w-11 items-center justify-center rounded-[10px] border border-accent-line bg-accent-wash text-accent">
-              {core.icon && <Icon name={core.icon} size={22} aria-hidden />}
-            </span>
-            <span className="mt-3 block font-mono text-[11px] uppercase tracking-[0.16em] text-accent">
-              {core.role}
-            </span>
-            <h2 className="mt-1 font-display text-2xl text-ink">{core.name}</h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted">{core.detail}</p>
+            <div className="lg:flex-1">
+              <p className="max-w-xl leading-relaxed text-ink-2">{core.detail}</p>
+            </div>
+
+            <div className="flex shrink-0 items-center gap-4 border-t border-line pt-6 lg:flex-col lg:items-end lg:gap-1 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+              <span className="font-mono text-5xl leading-none tabular-nums text-accent">
+                {satellites.length}
+              </span>
+              <span className="font-mono text-[10px] uppercase leading-tight tracking-[0.14em] text-muted lg:max-w-[5rem] lg:text-right">
+                outils reliés
+              </span>
+            </div>
           </div>
-
-          <Wow variant="orbit" className="relative mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {satellites.map((t) => {
-              const inner = (
-                <>
-                  <div className="flex items-start justify-between gap-2">
-                    <span className="inline-flex h-9 w-9 items-center justify-center rounded-[8px] border border-line bg-sunken text-accent transition-colors group-hover:border-accent-line">
-                      {t.icon && <Icon name={t.icon} size={18} aria-hidden />}
-                    </span>
-                    {t.href ? (
-                      <span className="inline-flex items-center gap-1 font-mono text-[11px] text-accent group-hover:underline">
-                        Visiter
-                        <ArrowUpRight size={12} aria-hidden />
-                      </span>
-                    ) : (
-                      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-faint">
-                        Interne
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="mt-4 font-display text-lg text-ink">{t.name}</h3>
-                  <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.1em] text-muted">
-                    {t.role}
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-ink-2">{t.detail}</p>
-                </>
-              );
-              const cls =
-                "wow-card group hover-lift flex flex-col rounded-[8px] border border-line bg-raised p-5";
-              return t.href ? (
-                <a
-                  key={t.name}
-                  href={t.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={cls}
-                >
-                  {inner}
-                </a>
-              ) : (
-                <div key={t.name} className={cls}>
-                  {inner}
-                </div>
-              );
-            })}
-          </Wow>
         </div>
+
+        {/* Connector */}
+        <div className="my-8 flex items-center justify-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+          <span className="h-px w-10 bg-line" aria-hidden />
+          Reliés à GridCRM, sans ressaisie
+          <span className="h-px w-10 bg-line" aria-hidden />
+        </div>
+
+        {/* Connected tools — rich cards */}
+        <Wow variant="rise" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {satellites.map((t, i) => {
+            const inner = (
+              <>
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -bottom-8 -right-2 -z-10 select-none font-display text-[130px] leading-none text-inset transition-colors duration-300 group-hover:text-accent-wash"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="flex-1">
+                  <h3 className="font-display text-xl text-ink">{t.name}</h3>
+                  <p className="mt-1 text-sm text-muted">{t.role}</p>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-2">{t.detail}</p>
+                </div>
+                <div className="mt-6 flex items-center justify-between border-t border-line pt-4">
+                  {t.href ? (
+                    <span className="inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-accent">
+                      Visiter le site
+                      <ArrowUpRight
+                        size={13}
+                        className="transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                        aria-hidden
+                      />
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] text-muted">
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
+                      Intégré nativement
+                    </span>
+                  )}
+                </div>
+              </>
+            );
+            const cls =
+              "wow-card group relative isolate flex h-full flex-col overflow-hidden rounded-[12px] border border-line bg-raised p-6 hover-lift";
+            return t.href ? (
+              <a key={t.name} href={t.href} target="_blank" rel="noopener noreferrer" className={cls}>
+                {inner}
+              </a>
+            ) : (
+              <div key={t.name} className={cls}>
+                {inner}
+              </div>
+            );
+          })}
+        </Wow>
       </Section>
 
       {/* Flux de données: directional ledger (works fully without motion) */}
@@ -117,10 +136,14 @@ export default function EcosystemePage() {
                 i > 0 && "border-t border-line",
               )}
             >
-              <div className="flex items-center gap-2 font-mono text-xs">
-                <span className="text-ink">{f.from}</span>
-                <ArrowRight size={14} className="text-accent" aria-hidden />
-                <span className="text-ink">{f.to}</span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-[4px] border border-line bg-sunken px-2 py-1 font-mono text-[11px] text-ink">
+                  {f.from}
+                </span>
+                <ArrowRight size={14} className="shrink-0 text-accent" aria-hidden />
+                <span className="rounded-[4px] border border-line bg-sunken px-2 py-1 font-mono text-[11px] text-ink">
+                  {f.to}
+                </span>
               </div>
               <span className="text-sm text-muted">{f.detail}</span>
             </li>
